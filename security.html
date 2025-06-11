@@ -1,5 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>Security Quiz</title></head>
-<body><h1>Security Quiz</h1><p>This is a placeholder for the Security Quiz.</p></body>
-</html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Security Structures Quiz</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to bottom right, #89f7fe, #66a6ff); padding: 20px; color: #222; }
+    h1, h2 { text-align: center; }
+    .question-card { background: #fff; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .option { background: #eee; margin: 8px 0; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+    .option.correct { background: #a1e3a1; }
+    .option.incorrect { background: #f79a9a; }
+    .explanation { margin-top: 10px; font-style: italic; }
+    #result { text-align: center; font-size: 1.5em; margin-top: 20px; }
+  </style>
+</head>
+<body>
+<h1>Test Your Knowledge: Security Structures</h1>
+<div class="question-card" id="quiz-container"></div>
+<div id="result"></div>
+
+<script>
+const questions = [
+  {
+    question: "Which UN organ is responsible for maintaining international peace and security?",
+    options: ["General Assembly", "Security Council", "Economic and Social Council", "International Court of Justice"],
+    answer: 1,
+    explanation: "The Security Council is primarily responsible for peace and security. Read [to be inserted] to find out more!"
+  },
+  {
+    question: "How many permanent members does the Security Council have?",
+    options: ["5", "7", "10", "15"],
+    answer: 0,
+    explanation: "There are 5 permanent members with veto power. Read [to be inserted] to find out more!"
+  },
+  {
+    question: "What is the minimum number of votes required for the Security Council to adopt a resolution?",
+    options: ["7", "9", "10", "15"],
+    answer: 1,
+    explanation: "At least 9 of 15 votes, including all permanent members not vetoing. Read [to be inserted] to find out more!"
+  },
+  {
+    question: "Which UN mission is primarily tasked with peacekeeping?",
+    options: ["UNICEF", "UNDP", "UN Peacekeeping Operations", "UNESCO"],
