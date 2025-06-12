@@ -1,48 +1,77 @@
-<!-- FILE 2: military-police.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Test Your Knowledge: UN Military & Police</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background: url('https://upload.wikimedia.org/wikipedia/commons/8/80/UNMIL_Peacekeepers.jpg') no-repeat center center fixed;
       background-size: cover;
-      color: #fff;
+      color: #003366;
       padding: 20px;
+      margin: 0;
     }
     .overlay {
-      background-color: rgba(0, 51, 102, 0.85);
-      padding: 20px;
-      border-radius: 12px;
+      background-color: rgba(230, 245, 255, 0.95);
+      padding: 30px;
       max-width: 700px;
       margin: auto;
+      border-radius: 16px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      color: #003366;
     }
     h1 {
       text-align: center;
-      color: #d0eaff;
+      color: #0073e6;
+      margin-bottom: 30px;
     }
     .question-card {
-      background-color: #003366;
+      background-color: #cce6ff;
       padding: 20px;
-      border-radius: 10px;
-      margin: 20px 0;
+      border-radius: 12px;
+      margin-bottom: 20px;
     }
     .option {
-      background-color: #005599;
-      padding: 10px;
+      background-color: #99ccff;
+      padding: 12px;
+      margin: 10px 0;
       border-radius: 8px;
-      margin: 8px 0;
       cursor: pointer;
-      transition: 0.3s;
+      transition: background-color 0.3s;
     }
-    .option.correct { background-color: #3cb371; }
-    .option.incorrect { background-color: #f44336; }
-    .explanation { font-style: italic; margin-top: 10px; }
-    #result { font-size: 1.4em; text-align: center; margin-top: 20px; }
+    .option:hover {
+      background-color: #80b3ff;
+    }
+    .option.correct {
+      background-color: #33cc99;
+      color: white;
+      font-weight: bold;
+    }
+    .option.incorrect {
+      background-color: #ff6666;
+      color: white;
+      font-weight: bold;
+    }
+    .explanation {
+      font-style: italic;
+      margin-top: 12px;
+      color: #004d00;
+    }
+    #result {
+      text-align: center;
+      font-size: 1.4em;
+      margin-top: 20px;
+      color: #003366;
+    }
     .hidden { display: none; }
-    #timer { font-weight: bold; text-align: center; font-size: 1.2em; color: #ffd700; }
+    #timer {
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.2em;
+      color: #0073e6;
+      margin-bottom: 15px;
+    }
   </style>
 </head>
 <body>
@@ -99,15 +128,9 @@ const questions = [
   },
   {
     question: "What time will a military officer aim to arrive at a meeting?",
-    options: ["Before it starts", "Exactly when it starts", "Anytime after it starts"],
+    options: ["Before it starts", "Exactly when it starts", "Anytime", "After it starts"],
     answer: 0,
     explanation: "Military staff are usually expected to report earlier."
-  },
-  {
-    question: "Western vs Non-Western cultures: What is a key difference in communication?",
-    options: ["Directness", "Formality", "Volume", "Language"],
-    answer: 0,
-    explanation: "Western cultures often prefer more direct communication."
   }
 ];
 
@@ -125,7 +148,7 @@ function startTimer() {
     document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
-      selectAnswer(-1); // timeout
+      selectAnswer(-1);
     }
   }, 1000);
 }
@@ -133,8 +156,10 @@ function startTimer() {
 function renderQuestion() {
   const q = questions[current];
   const container = document.getElementById('quiz-container');
+  container.classList.remove('hidden');
   container.innerHTML = `<h2>${q.question}</h2>` + q.options.map((opt, i) =>
     `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('');
+  document.getElementById('result').classList.add('hidden');
   startTimer();
 }
 
@@ -157,15 +182,21 @@ function selectAnswer(i) {
     current++;
     if (current < questions.length) renderQuestion();
     else showResult();
-  }, 2000);
+  }, 3000);
 }
 
 function showResult() {
   document.getElementById('quiz-container').classList.add('hidden');
   const result = document.getElementById('result');
-  const rating = score === 9 ? 'Outstanding!' : score >= 8 ? 'Excellent!' : score >= 6 ? 'Great!' : score >= 5 ? 'Very good!' : 'Read to learn more!';
+  let rating;
+  if (score === questions.length) rating = "Outstanding!";
+  else if (score >= questions.length - 1) rating = "Excellent!";
+  else if (score >= questions.length - 2) rating = "Great!";
+  else if (score >= questions.length - 3) rating = "Very good!";
+  else if (score >= 1) rating = "Ready to learn more!";
+  else rating = "Keep practicing!";
   result.classList.remove('hidden');
-  result.innerHTML = `You scored ${score}/9 – <strong>${rating}</strong>`;
+  result.innerHTML = `You scored ${score}/${questions.length} – <strong>${rating}</strong>`;
 }
 
 renderQuestion();
