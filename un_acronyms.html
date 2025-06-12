@@ -1,99 +1,226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>UN Acronyms Quiz</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/1/1e/UN_Security_Council_Chamber.jpg') center/cover no-repeat;
-      margin: 0; padding: 20px; color: #fff;
-    }
-    .overlay {
-      background-color: rgba(91, 146, 229, 0.85);
-      padding: 20px; border-radius: 12px; max-width: 600px; margin: auto;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-    h1 { text-align: center; color: #e0efff; }
-    .option {
-      background-color: #e0f0ff;
-      color: #003366;
-      padding: 10px; margin: 8px 0;
-      border-radius: 8px; cursor: pointer;
-      word-break: break-word;
-      transition: background-color 0.3s;
-    }
-    .option:hover { background: #cbe6ff; }
-    .correct { background: #33cc99 !important; color: #fff; }
-    .incorrect { background: #ff6666 !important; color: #fff; }
-    #timer { font-size: 1.2em; margin-bottom: 10px; color: #fff; text-align:center; }
-    #result { margin-top: 20px; text-align: center; font-size:1.4em; }
-    .hidden { display: none; }
-    button { margin-top:10px; padding:10px 20px; border:none; border-radius:8px; background:#003366; color:white; cursor:pointer; }
-    button:hover { background:#002244; }
-  </style>
+<meta charset="UTF-8" />
+<title>UN Acronyms</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/1/1e/UN_Security_Council_Chamber.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #cce6ff;
+    padding: 20px;
+    margin: 0;
+  }
+  .overlay {
+    background-color: rgba(0, 51, 102, 0.85);
+    padding: 30px;
+    max-width: 700px;
+    margin: auto;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    color: #cce6ff;
+  }
+  h1 {
+    text-align: center;
+    color: #99ccff;
+    margin-bottom: 30px;
+  }
+  .question-card {
+    background-color: rgba(204, 230, 255, 0.15);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .option {
+    background-color: rgba(51, 102, 153, 0.6);
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: #cce6ff;
+  }
+  .option:hover {
+    background-color: rgba(51, 102, 153, 0.8);
+  }
+  .option.correct {
+    background-color: #33cc99;
+    color: white;
+    font-weight: bold;
+  }
+  .option.incorrect {
+    background-color: #ff6666;
+    color: white;
+    font-weight: bold;
+  }
+  .explanation {
+    font-style: italic;
+    margin-top: 12px;
+    color: #99ffcc;
+  }
+  #result {
+    text-align: center;
+    font-size: 1.4em;
+    margin-top: 20px;
+    color: #cce6ff;
+  }
+  #download-placeholder {
+    font-size: 1.3em;
+    margin-top: 30px;
+    color: #66d9ff;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+  }
+  .hidden { display: none; }
+  #timer {
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+    color: #99ccff;
+    margin-bottom: 15px;
+  }
+</style>
 </head>
 <body>
-  <div class="overlay">
-    <h1>UN Acronyms Quiz</h1>
-    <div id="timer">Time left: <span id="countdown">30</span>s</div>
-    <div id="quiz-container"></div>
-    <div id="result" class="hidden"></div>
+<div class="overlay">
+  <h1>UN Acronyms</h1>
+  <div id="timer"></div>
+  <div class="question-card" id="quiz-container"></div>
+  <div id="result" class="hidden"></div>
+  <div id="download-placeholder" class="hidden">
+    Click here to download [UN Acronyms Guide] to learn more.<br>
+    After you’ve read it, reach out to me. I’ll be offering free video sessions to answer your specific questions.
   </div>
-  <script>
-    const q = [
-      { question: "What is OP‑CAT?", options:["Optional Protocol to the Convention Against Torture","Operational Committee for Arms Trade","Office for Counterterrorism Action Team","Official Protocol on Child and Trafficking"], answer:0, explanation:"Optional Protocol to the Convention Against Torture." },
-      { question: "What is ACABQ?", options:["Advisory Committee on Administrative and Budgetary Questions","African Charter on Arms and Budgetary Questions","Administrative Council Against Bureaucratic Quotas","Association for Central Asian Budgetary Questions"], answer:0, explanation:"Advisory Committee on Administrative and Budgetary Questions." },
-      { question: "BINUH is in which country?", options:["Haiti","Burundi","Niger","Ukraine"], answer:0, explanation:"BINUH operates in Haiti." },
-      { question: "What is EOSG?", options:["Executive Office of the Secretary‑General","Economic Office of Strategic Governance","Environmental Oversight and Sustainability Group","Emergency Operations and Safety Group"], answer:0, explanation:"Executive Office of the Secretary‑General." },
-      { question: "What is UNSSC?", options:["United Nations System Staff College","United Nations Secretariat Service Committee","United Nations Strategic Support Cell","UN Security Steering Commission"], answer:0, explanation:"United Nations System Staff College." }
-    ];
-    let current=0, score=0, timer;
-    function startTimer() {
-      let t=30;
-      document.getElementById('countdown').textContent=t;
-      clearInterval(timer);
-      timer = setInterval(() => {
-        t--; document.getElementById('countdown').textContent=t;
-        if(t<=0) { clearInterval(timer); selectAnswer(-1); }
-      },1000);
+</div>
+<script>
+const questions = [
+  {
+    question: "What is the human rights instrument OP-CAT?",
+    options: [
+      "Optional Protocol to the Convention Against Torture",
+      "Operational Peacekeeping Charter",
+      "Official Protocol on Civilian Assistance Teams",
+      "Organizational Policy on Child Advocacy Training"
+    ],
+    answer: 0,
+    explanation: "OP-CAT is the Optional Protocol to the Convention Against Torture."
+  },
+  {
+    question: "What does MONUSCO stand for?",
+    options: [
+      "United Nations Organization Stabilization Mission in the Democratic Republic of the Congo",
+      "Military Operation for Neutralizing UN Security Council Orders",
+      "Mission of United Nations for Security and Cooperation",
+      "Management Office of UN Support and Coordination"
+    ],
+    answer: 0,
+    explanation: "MONUSCO is the UN Stabilization Mission in DRC."
+  },
+  {
+    question: "What does UNMISS stand for?",
+    options: [
+      "United Nations Mission in South Sudan",
+      "United Nations Military Support Service",
+      "United Nations Mediation and Security Service",
+      "United Nations Maritime Safety Section"
+    ],
+    answer: 0,
+    explanation: "UNMISS is the UN Mission in South Sudan."
+  },
+  {
+    question: "What is the meaning of OHCHR?",
+    options: [
+      "Office of the High Commissioner for Human Rights",
+      "Organization for Humanitarian and Civil Rights",
+      "Office for Health and Child Rights",
+      "Operational Headquarters for Civil Resilience"
+    ],
+    answer: 0,
+    explanation: "OHCHR stands for Office of the High Commissioner for Human Rights."
+  },
+  {
+    question: "What does UNDP stand for?",
+    options: [
+      "United Nations Development Programme",
+      "United Nations Defense Protocol",
+      "United Nations Diplomatic Panel",
+      "United Nations Disaster Preparedness"
+    ],
+    answer: 0,
+    explanation: "UNDP is the United Nations Development Programme."
+  }
+];
+
+let current = 0;
+let score = 0;
+let timeLeft = 10;
+let timerInterval;
+
+function startTimer() {
+  timeLeft = 10;
+  document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      selectAnswer(-1);
     }
-    function renderQuestion(){
-      clearInterval(timer);
-      const qq=q[current];
-      const container=document.getElementById('quiz-container');
-      container.innerHTML=`<h2>${qq.question}</h2>`+qq.options.map((opt,i)=>`<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('');
-      startTimer();
-    }
-    function selectAnswer(i){
-      clearInterval(timer);
-      const qq=q[current];
-      document.querySelectorAll('.option').forEach((opt,idx)=>{
-        opt.onclick=null;
-        if(idx===qq.answer) opt.classList.add('correct');
-        else if(idx===i) opt.classList.add('incorrect');
-      });
-      if(i===qq.answer) score++;
-      const ex=document.createElement('div');
-      ex.className="explanation";
-      ex.innerText=qq.explanation;
-      document.getElementById('quiz-container').appendChild(ex);
-      setTimeout(()=> {
-        current++;
-        if(current<q.length) renderQuestion();
-        else showResult();
-      },3000);
-    }
-    function showResult(){
-      document.getElementById('quiz-container').classList.add('hidden');
-      document.getElementById('timer').classList.add('hidden');
-      const res=document.getElementById('result');
-      const msgs=["Outstanding!","Excellent!","Great!","Very good!","Keep learning!","Keep learning!"];
-      const rating=score===5?msgs[0]:score===4?msgs[1]:score===3?msgs[2]:msgs===2?msgs[3]:msgs[4];
-      res.innerHTML=`You scored ${score}/5 – <strong>${rating}</strong><br>Read more at <a href="https://www.un.org/en/about-us" target="_blank">UN About Us</a><br><button onclick="location.reload()">Try Again</button>`;
-      res.classList.remove('hidden');
-    }
-    renderQuestion();
-  </script>
+  }, 1000);
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  const container = document.getElementById('quiz-container');
+  container.classList.remove('hidden');
+  container.innerHTML = `<h2>${q.question}</h2>` + q.options.map((opt, i) =>
+    `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('');
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('download-placeholder').classList.add('hidden');
+  startTimer();
+}
+
+function selectAnswer(i) {
+  clearInterval(timerInterval);
+  const q = questions[current];
+  const opts = document.querySelectorAll('.option');
+  opts.forEach((opt, idx) => {
+    opt.classList.remove('correct', 'incorrect');
+    opt.onclick = null;
+    if (idx === q.answer) opt.classList.add('correct');
+    else if (idx === i) opt.classList.add('incorrect');
+  });
+  if (i === q.answer) score++;
+  const explanation = document.createElement("div");
+  explanation.className = "explanation";
+  explanation.innerText = q.explanation;
+  document.getElementById('quiz-container').appendChild(explanation);
+  setTimeout(() => {
+    current++;
+    if (current < questions.length) renderQuestion();
+    else showResult();
+  }, 3000);
+}
+
+function showResult() {
+  document.getElementById('quiz-container').classList.add('hidden');
+  const result = document.getElementById('result');
+  let rating;
+  if (score === 5) rating = "Outstanding!";
+  else if (score === 4) rating = "Excellent!";
+  else if (score === 3) rating = "Great!";
+  else if (score === 2) rating = "Very good!";
+  else if (score === 1) rating = "Ready to learn more!";
+  else rating = "Keep practicing!";
+  result.classList.remove('hidden');
+  result.innerHTML = `You scored ${score}/5 – <strong>${rating}</strong>`;
+  document.getElementById('download-placeholder').classList.remove('hidden');
+}
+
+renderQuestion();
+</script>
 </body>
 </html>
