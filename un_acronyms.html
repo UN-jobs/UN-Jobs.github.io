@@ -1,226 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>UN Acronyms</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/1/1e/UN_Security_Council_Chamber.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #cce6ff;
-    padding: 20px;
-    margin: 0;
-  }
-  .overlay {
-    background-color: rgba(0, 51, 102, 0.85);
-    padding: 30px;
-    max-width: 700px;
-    margin: auto;
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    color: #cce6ff;
-  }
-  h1 {
-    text-align: center;
-    color: #99ccff;
-    margin-bottom: 30px;
-  }
-  .question-card {
-    background-color: rgba(204, 230, 255, 0.15);
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
-  .option {
-    background-color: rgba(51, 102, 153, 0.6);
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    color: #cce6ff;
-  }
-  .option:hover {
-    background-color: rgba(51, 102, 153, 0.8);
-  }
-  .option.correct {
-    background-color: #33cc99;
-    color: white;
-    font-weight: bold;
-  }
-  .option.incorrect {
-    background-color: #ff6666;
-    color: white;
-    font-weight: bold;
-  }
-  .explanation {
-    font-style: italic;
-    margin-top: 12px;
-    color: #99ffcc;
-  }
-  #result {
-    text-align: center;
-    font-size: 1.4em;
-    margin-top: 20px;
-    color: #cce6ff;
-  }
-  #download-placeholder {
-    font-size: 1.3em;
-    margin-top: 30px;
-    color: #66d9ff;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-  }
-  .hidden { display: none; }
-  #timer {
-    font-weight: bold;
-    text-align: center;
-    font-size: 1.2em;
-    color: #99ccff;
-    margin-bottom: 15px;
-  }
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#001f3f;color:#fff;}
+  .container{max-width:600px;margin:60px auto;background:rgba(255,255,255,0.03);padding:20px;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+  h1{text-align:center;color:#99ccff;}
+  #timer{text-align:right;font-size:1rem;color:#adcfff;}
+  .question{font-size:1.2rem;margin:20px 0;}
+  .options{display:grid;gap:12px;}
+  .option{background:rgba(255,255,255,0.1);padding:15px;border-radius:12px;cursor:pointer;transition:0.2s;}
+  .option:hover{background:rgba(255,255,255,0.2);}
+  .correct{background:#33cc99!important;color:#001f3f;font-weight:bold;}
+  .incorrect{background:#ff6666!important;color:#001f3f;font-weight:bold;}
+  .explanation{font-style:italic;margin:15px 0;color:#adcfff;}
+  #result{text-align:center;margin:20px;font-size:1.2rem;}
+  #download{display:none;text-align:center;margin-top:20px;color:#66d9ff;cursor:pointer;}
 </style>
 </head>
 <body>
-<div class="overlay">
+<div class="container">
   <h1>UN Acronyms</h1>
-  <div id="timer"></div>
-  <div class="question-card" id="quiz-container"></div>
-  <div id="result" class="hidden"></div>
-  <div id="download-placeholder" class="hidden">
+  <div id="timer">Time left:10s</div>
+  <div class="question" id="question"></div>
+  <div class="options" id="options"></div>
+  <div class="explanation" id="explanation"></div>
+  <div id="result"></div>
+  <div id="download">
     Click here to download [UN Acronyms Guide] to learn more.<br>
     After you’ve read it, reach out to me. I’ll be offering free video sessions to answer your specific questions.
   </div>
 </div>
 <script>
-const questions = [
-  {
-    question: "What is the human rights instrument OP-CAT?",
-    options: [
-      "Optional Protocol to the Convention Against Torture",
-      "Operational Peacekeeping Charter",
-      "Official Protocol on Civilian Assistance Teams",
-      "Organizational Policy on Child Advocacy Training"
-    ],
-    answer: 0,
-    explanation: "OP-CAT is the Optional Protocol to the Convention Against Torture."
-  },
-  {
-    question: "What does MONUSCO stand for?",
-    options: [
-      "United Nations Organization Stabilization Mission in the Democratic Republic of the Congo",
-      "Military Operation for Neutralizing UN Security Council Orders",
-      "Mission of United Nations for Security and Cooperation",
-      "Management Office of UN Support and Coordination"
-    ],
-    answer: 0,
-    explanation: "MONUSCO is the UN Stabilization Mission in DRC."
-  },
-  {
-    question: "What does UNMISS stand for?",
-    options: [
-      "United Nations Mission in South Sudan",
-      "United Nations Military Support Service",
-      "United Nations Mediation and Security Service",
-      "United Nations Maritime Safety Section"
-    ],
-    answer: 0,
-    explanation: "UNMISS is the UN Mission in South Sudan."
-  },
-  {
-    question: "What is the meaning of OHCHR?",
-    options: [
-      "Office of the High Commissioner for Human Rights",
-      "Organization for Humanitarian and Civil Rights",
-      "Office for Health and Child Rights",
-      "Operational Headquarters for Civil Resilience"
-    ],
-    answer: 0,
-    explanation: "OHCHR stands for Office of the High Commissioner for Human Rights."
-  },
-  {
-    question: "What does UNDP stand for?",
-    options: [
-      "United Nations Development Programme",
-      "United Nations Defense Protocol",
-      "United Nations Diplomatic Panel",
-      "United Nations Disaster Preparedness"
-    ],
-    answer: 0,
-    explanation: "UNDP is the United Nations Development Programme."
-  }
+const questions=[
+ {q:"What is the human rights instrument OP-CAT?",opts:[
+   "Optional Protocol to the Convention Against Torture",
+   "Optional Protocol for Committees and Treaties",
+   "Office for Counterterrorism Action Team",
+   "Official Protocol on Child and Trafficking"],a:0},
+ {q:"What is the UN's ACABQ?",opts:[
+   "Advisory Committee on Administrative and Budgetary Questions",
+   "African Charter on Administrative and Budgetary Questions",
+   "Administrative Council Against Bureaucratic Quotas",
+   "Association for Central Asian Budgetary Questions"],a:0},
+ {q:"BINUH is the UN office in which country?",opts:["Haiti","Burundi","Niger","Ukraine"],a:0},
+ {q:"What is the UN's EOSG in New York?",opts:[
+   "Executive Office of the Secretary-General",
+   "Economic Office of Strategic Governance",
+   "Environmental Oversight and Sustainability Group",
+   "Emergency Operations and Safety Group"],a:0},
+ {q:"What is UNSSC?",opts:[
+   "United Nations System Staff College",
+   "United Nations Secretariat Service Committee",
+   "United Nations Strategic Support Cell",
+   "UN Security Steering Commission"],a:0}
 ];
-
-let current = 0;
-let score = 0;
-let timeLeft = 10;
-let timerInterval;
-
-function startTimer() {
-  timeLeft = 10;
-  document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
-  clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      selectAnswer(-1);
-    }
-  }, 1000);
-}
-
-function renderQuestion() {
-  const q = questions[current];
-  const container = document.getElementById('quiz-container');
-  container.classList.remove('hidden');
-  container.innerHTML = `<h2>${q.question}</h2>` + q.options.map((opt, i) =>
-    `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('');
-  document.getElementById('result').classList.add('hidden');
-  document.getElementById('download-placeholder').classList.add('hidden');
-  startTimer();
-}
-
-function selectAnswer(i) {
-  clearInterval(timerInterval);
-  const q = questions[current];
-  const opts = document.querySelectorAll('.option');
-  opts.forEach((opt, idx) => {
-    opt.classList.remove('correct', 'incorrect');
-    opt.onclick = null;
-    if (idx === q.answer) opt.classList.add('correct');
-    else if (idx === i) opt.classList.add('incorrect');
+let idx=0,score=0,timeLeft=10,timer;
+const qEl=document.getElementById('question'),optsEl=document.getElementById('options'),
+exEl=document.getElementById('explanation'),resEl=document.getElementById('result'),
+tim=document.getElementById('timer'),dl=document.getElementById('download');
+function show(){
+  timeLeft=10; tim.textContent="Time left:10s"; clearInterval(timer);
+  timer=setInterval(()=>{timeLeft--;tim.textContent=`Time left:${timeLeft}s`;if(timeLeft<=0)select(-1)},1000);
+  const {q,opts}=questions[idx];
+  qEl.textContent=q; optsEl.innerHTML=''; exEl.textContent=''; resEl.textContent=''; dl.style.display="none";
+  opts.forEach((o,i)=>{
+    const d=document.createElement('div');
+    d.textContent=o; d.className='option';
+    d.onclick=()=>select(i);
+    optsEl.appendChild(d);
   });
-  if (i === q.answer) score++;
-  const explanation = document.createElement("div");
-  explanation.className = "explanation";
-  explanation.innerText = q.explanation;
-  document.getElementById('quiz-container').appendChild(explanation);
-  setTimeout(() => {
-    current++;
-    if (current < questions.length) renderQuestion();
-    else showResult();
-  }, 3000);
 }
-
-function showResult() {
-  document.getElementById('quiz-container').classList.add('hidden');
-  const result = document.getElementById('result');
-  let rating;
-  if (score === 5) rating = "Outstanding!";
-  else if (score === 4) rating = "Excellent!";
-  else if (score === 3) rating = "Great!";
-  else if (score === 2) rating = "Very good!";
-  else if (score === 1) rating = "Ready to learn more!";
-  else rating = "Keep practicing!";
-  result.classList.remove('hidden');
-  result.innerHTML = `You scored ${score}/5 – <strong>${rating}</strong>`;
-  document.getElementById('download-placeholder').classList.remove('hidden');
+function select(i){
+  clearInterval(timer);
+  const {opts,a}=questions[idx];
+  Array.from(optsEl.children).forEach((el,j)=>{
+    el.classList.add(j===a?'correct':j===i?'incorrect':'');
+    el.onclick=null;
+  });
+  if(i===a)score++;
+  exEl.textContent=`Answer: ${opts[a]}.`;
+  setTimeout(()=>{idx++; idx<questions.length?show():finish();},2000);
 }
-
-renderQuestion();
+function finish(){
+  qEl.textContent=''; optsEl.innerHTML=''; exEl.textContent='';
+  resEl.textContent=`You scored ${score}/${questions.length}.`;
+  dl.style.display="block";
+}
+show();
 </script>
 </body>
 </html>
