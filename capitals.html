@@ -1,89 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Capital Cities Quiz</title>
+  <meta charset="UTF-8">
+  <title>World Capitals Flashcard Quiz</title>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to bottom right, #f6d365, #fda085); padding: 20px; color: #333; }
-    h1, h2 { text-align: center; }
-    .question-card { background: #fff; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .option { background: #eee; margin: 8px 0; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-    .option.correct { background: #a1e3a1; }
-    .option.incorrect { background: #f79a9a; }
-    .explanation { margin-top: 10px; font-style: italic; }
-    #result { text-align: center; font-size: 1.5em; margin-top: 20px; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #f0f8ff;
+      text-shadow: 1px 1px 5px #000;
+    }
+
+    .card {
+      background: rgba(0, 51, 102, 0.9);
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+      padding: 30px;
+      width: 100%;
+      max-width: 700px;
+      text-align: center;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .question {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option {
+      background: #e0f3ff;
+      color: #003366;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .option:hover {
+      background: #cbe6ff;
+    }
+
+    .option.correct {
+      background: #2ecc71 !important;
+      color: white;
+    }
+
+    .option.incorrect {
+      background: #e74c3c !important;
+      color: white;
+    }
+
+    #result {
+      font-size: 1.5rem;
+      margin-top: 30px;
+      background: rgba(0,0,0,0.6);
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .timer {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 10px;
+      color: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        padding: 20px;
+      }
+    }
   </style>
 </head>
 <body>
-<h1>Test Your Knowledge: Capital Cities</h1>
-<div class="question-card" id="quiz-container"></div>
+
+<h1>UN World Capitals Flashcard Quiz</h1>
+<div class="timer" id="timer">Time left: 30s</div>
+<div class="card" id="quiz-container"></div>
 <div id="result"></div>
 
 <script>
-const questions = [
-  { question: "What is the capital of Kenya?", options: ["Nairobi", "Kampala", "Dar es Salaam", "Addis Ababa"], answer: 0, explanation: "Nairobi is the capital of Kenya and a major UN hub. Read [to be inserted] to find out more!" },
-  { question: "Which of these is the capital of Burkina Faso?", options: ["Ouagadougou", "Bamako", "Niamey", "Lomé"], answer: 0, explanation: "Ouagadougou is the capital and home to a major UN presence. Read [to be inserted] to find out more!" },
-  { question: "What is the capital of Myanmar?", options: ["Yangon", "Mandalay", "Naypyidaw", "Taunggyi"], answer: 2, explanation: "Naypyidaw has been the official capital since 2005. Read [to be inserted] to find out more!" },
-  { question: "Which city is the capital of the Democratic Republic of Congo?", options: ["Kinshasa", "Brazzaville", "Lubumbashi", "Bujumbura"], answer: 0, explanation: "Kinshasa is the capital and the largest city of DRC. Read [to be inserted] to find out more!" },
-  { question: "What is the capital of Eritrea?", options: ["Asmara", "Mekelle", "Djibouti", "Hargeisa"], answer: 0, explanation: "Asmara is the capital city. Read [to be inserted] to find out more!" },
-  { question: "What is the capital of Timor-Leste?", options: ["Dili", "Baucau", "Kupang", "Suai"], answer: 0, explanation: "Dili is the capital of Timor-Leste. Read [to be inserted] to find out more!" },
-  { question: "What is the capital of Central African Republic?", options: ["Bangui", "N'Djamena", "Libreville", "Yaoundé"], answer: 0, explanation: "Bangui is the capital of the Central African Republic. Read [to be inserted] to find out more!" },
-  { question: "What is the capital of Bahrain?", options: ["Manama", "Muscat", "Doha", "Riyadh"], answer: 0, explanation: "Manama is the capital of Bahrain. Read [to be inserted] to find out more!" },
-  { question: "What is the capital of Turkmenistan?", options: ["Ashgabat", "Tashkent", "Bishkek", "Almaty"], answer: 0, explanation: "Ashgabat is the capital of Turkmenistan. Read [to be inserted] to find out more!" },
-  { question: "What is the capital of Nepal?", options: ["Kathmandu", "Thimphu", "Pokhara", "Dhaka"], answer: 0, explanation: "Kathmandu is the political and cultural center of Nepal. Read [to be inserted] to find out more!" }
-];
+  const questions = [
+    { question: "Your UN manager asks: Can you get on the phone with Juba? Who do you call?", options: ["South Sudan", "Sudan", "Ethiopia", "Chad"], answer: 0 },
+    { question: "Does Wellington agree? What country is this UN official referring to?", options: ["Australia", "Canada", "New Zealand", "UK"], answer: 2 },
+    { question: "Where is Dhaka on this?", options: ["Pakistan", "Nepal", "India", "Bangladesh"], answer: 3 },
+    { question: "Ouagadougou is the capital of?", options: ["Burkina Faso", "Benin", "Cameroon", "Togo"], answer: 0 },
+    { question: "Naypyidaw has been which capital since 2005?", options: ["Myanmar", "Malaysia", "Thailand", "Vietnam"], answer: 0 },
+    { question: "Has the delegation arrived in Kinshasa?", options: ["Republic of Congo", "Angola", "Rwanda", "Democratic Republic of the Congo"], answer: 3 },
+    { question: "Have we got an answer from Asmara?", options: ["Eritrea", "Ethiopia", "Djibouti", "Somalia"], answer: 0 },
+    { question: "Dili is the capital of?", options: ["East Timor", "Indonesia", "Malaysia", "Papua New Guinea"], answer: 0 },
+    { question: "Did you see that UN political job in Bangui? (Where?)", options: ["Cameroon", "CAR", "DRC", "Gabon"], answer: 1 },
+    { question: "I'll call you from Manama. The call will come from which country?", options: ["Qatar", "UAE", "Bahrain", "Oman"], answer: 2 },
+    { question: "There's a UN vacancy going in Ashgabat. That would be perfect for you!", options: ["Uzbekistan", "Afghanistan", "Turkmenistan", "Kazakhstan"], answer: 2 },
+    { question: "Kathmandu is the political and cultural center of where?", options: ["India", "Tibet", "Bangladesh", "Nepal"], answer: 3 }
+  ];
 
-let current = 0;
-let score = 0;
+  let current = 0;
+  let score = 0;
+  let timer;
+  let timeLeft = 30;
 
-function renderQuestion() {
-  const q = questions[current];
-  const container = document.getElementById('quiz-container');
-  container.innerHTML = `<h2>${q.question}</h2>` + q.options.map((opt, i) =>
-    `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('');
-}
+  function startTimer() {
+    timeLeft = 30;
+    document.getElementById('timer').textContent = `Time left: ${timeLeft}s`;
+    clearInterval(timer);
+    timer = setInterval(() => {
+      timeLeft--;
+      document.getElementById('timer').textContent = `Time left: ${timeLeft}s`;
+      if (timeLeft === 0) {
+        clearInterval(timer);
+        selectAnswer(-1); // no answer chosen
+      }
+    }, 1000);
+  }
 
-function selectAnswer(i) {
-  const q = questions[current];
-  const opts = document.querySelectorAll('.option');
-  opts.forEach((opt, idx) => {
-    opt.classList.remove('correct', 'incorrect');
-    opt.onclick = null;
-    if (idx === q.answer) opt.classList.add('correct');
-    else if (idx === i) opt.classList.add('incorrect');
-  });
-  if (i === q.answer) score++;
-  const explanation = document.createElement("div");
-  explanation.className = "explanation";
-  explanation.innerText = q.explanation;
-  document.getElementById('quiz-container').appendChild(explanation);
+  function renderQuestion() {
+    startTimer();
+    const q = questions[current];
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = `
+      <div class="question">${q.question}</div>
+      <div class="options">
+        ${q.options.map((opt, i) => `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('')}
+      </div>
+    `;
+  }
 
-  setTimeout(() => {
-    current++;
-    if (current < questions.length) renderQuestion();
-    else showResult();
-  }, 2000);
-}
+  function selectAnswer(i) {
+    clearInterval(timer);
+    const q = questions[current];
+    const opts = document.querySelectorAll('.option');
+    opts.forEach((opt, idx) => {
+      opt.onclick = null;
+      if (idx === q.answer) opt.classList.add('correct');
+      else if (idx === i) opt.classList.add('incorrect');
+    });
+    if (i === q.answer) score++;
 
-function showResult() {
-  const container = document.getElementById('quiz-container');
-  container.innerHTML = '';
-  const result = document.getElementById('result');
-  const messages = ["Outstanding!", "Excellent!", "Great!", "Very good!", "Not bad – keep learning!", "Needs more practice!", "Time to hit the books!"];
-  const readMore = "Read [to be inserted] to find out more!";
-  let rating;
-  if (score === 10) rating = messages[0];
-  else if (score >= 8) rating = messages[1];
-  else if (score >= 6) rating = messages[2];
-  else if (score >= 5) rating = messages[3];
-  else if (score >= 3) rating = messages[4];
-  else if (score >= 1) rating = messages[5];
-  else rating = messages[6];
+    setTimeout(() => {
+      current++;
+      if (current < questions.length) renderQuestion();
+      else showResult();
+    }, 2000);
+  }
 
-  result.innerHTML = `You scored ${score}/10 – <strong>${rating}</strong><br>${readMore}`;
-}
+  function showResult() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+    document.getElementById('timer').style.display = 'none';
+    const result = document.getElementById('result');
+    const messages = ["Outstanding!", "Excellent!", "Great!", "Very good!", "Not bad – keep learning!", "Needs more practice!", "Time to hit the books!"];
+    const readMore = "Read more on the UN Careers Portal or Peacekeeping.int!";
+    let rating;
+    if (score === questions.length) rating = messages[0];
+    else if (score >= questions.length - 1) rating = messages[1];
+    else if (score >= questions.length - 2) rating = messages[2];
+    else if (score >= questions.length - 3) rating = messages[3];
+    else if (score >= questions.length - 4) rating = messages[4];
+    else if (score >= 1) rating = messages[5];
+    else rating = messages[6];
 
-renderQuestion();
+    result.innerHTML = `You scored ${score}/${questions.length} – <strong>${rating}</strong><br>${readMore}`;
+  }
+
+  renderQuestion();
 </script>
 </body>
 </html>
