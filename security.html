@@ -1,205 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Test Your Knowledge: UN Military & Police</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/8/80/UNMIL_Peacekeepers.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #003366;
-      padding: 20px;
-      margin: 0;
-    }
-    .overlay {
-      background-color: rgba(230, 245, 255, 0.95);
-      padding: 30px;
-      max-width: 700px;
-      margin: auto;
-      border-radius: 16px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      color: #003366;
-    }
-    h1 {
-      text-align: center;
-      color: #0073e6;
-      margin-bottom: 30px;
-    }
-    .question-card {
-      background-color: #cce6ff;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-    .option {
-      background-color: #99ccff;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .option:hover {
-      background-color: #80b3ff;
-    }
-    .option.correct {
-      background-color: #33cc99;
-      color: white;
-      font-weight: bold;
-    }
-    .option.incorrect {
-      background-color: #ff6666;
-      color: white;
-      font-weight: bold;
-    }
-    .explanation {
-      font-style: italic;
-      margin-top: 12px;
-      color: #004d00;
-    }
-    #result {
-      text-align: center;
-      font-size: 1.4em;
-      margin-top: 20px;
-      color: #003366;
-    }
-    .hidden { display: none; }
-    #timer {
-      font-weight: bold;
-      text-align: center;
-      font-size: 1.2em;
-      color: #0073e6;
-      margin-bottom: 15px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>UN Military and Police</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: url('https://upload.wikimedia.org/wikipedia/commons/3/31/UN_Mission_Sudan_Peacekeepers_Patrol_2010.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: #cce6ff;
+    padding: 20px;
+    margin: 0;
+  }
+  .overlay {
+    background-color: rgba(0, 51, 102, 0.85);
+    padding: 30px;
+    max-width: 700px;
+    margin: auto;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    color: #cce6ff;
+  }
+  h1 {
+    text-align: center;
+    color: #99ccff;
+    margin-bottom: 30px;
+  }
+  .question-card {
+    background-color: rgba(204, 230, 255, 0.15);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .option {
+    background-color: rgba(51, 102, 153, 0.6);
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    color: #cce6ff;
+  }
+  .option:hover {
+    background-color: rgba(51, 102, 153, 0.8);
+  }
+  .option.correct {
+    background-color: #33cc99;
+    color: white;
+    font-weight: bold;
+  }
+  .option.incorrect {
+    background-color: #ff6666;
+    color: white;
+    font-weight: bold;
+  }
+  .explanation {
+    font-style: italic;
+    margin-top: 12px;
+    color: #99ffcc;
+  }
+  #result {
+    text-align: center;
+    font-size: 1.4em;
+    margin-top: 20px;
+    color: #cce6ff;
+  }
+  #download-placeholder {
+    font-size: 1.3em;
+    margin-top: 30px;
+    color: #66d9ff;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+  }
+  .hidden { display: none; }
+  #timer {
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+    color: #99ccff;
+    margin-bottom: 15px;
+  }
+</style>
 </head>
 <body>
-  <div class="overlay">
-    <h1>Test Your Knowledge: UN Military & Police</h1>
-    <div id="timer"></div>
-    <div class="question-card" id="quiz-container"></div>
-    <div id="result" class="hidden"></div>
-  </div>
-
-<script>
-const questions = [
-  {
-    question: "How many 'stars' for a Major General in the Pakistani Army?",
-    options: ["1", "2", "3", "4"],
-    answer: 1,
-    explanation: "Two star General."
-  },
-  {
-    question: "What letter is 'Alpha' in NATO phonetic alphabet?",
-    options: ["A", "L", "P", "H"],
-    answer: 0,
-    explanation: "'Alpha' is the NATO phonetic for A."
-  },
-  {
-    question: "NATO phonetic word for the letter 'B'?",
-    options: ["Bravo", "Beta", "Boston", "Baron"],
-    answer: 0,
-    explanation: "'Bravo' is the phonetic term for B."
-  },
-  {
-    question: "Size of typical Bangladeshi Army company?",
-    options: ["10-20 soldiers", "40", "80-250", "1,000-2,000"],
-    answer: 2,
-    explanation: "A company typically ranges 80–250 personnel."
-  },
-  {
-    question: "Which is the fixed-wing aircraft?",
-    options: ["C-130 Hercules", "Mi-8", "UH-60 Black Hawk", "CH-47 Chinook"],
-    answer: 0,
-    explanation: "The C-130 is a fixed-wing transport aircraft."
-  },
-  {
-    question: "Which is NOT a rotary aircraft?",
-    options: ["Bell 412", "Mi-17", "C-130 Hercules", "UH-1 Huey"],
-    answer: 2,
-    explanation: "The C-130 is fixed-wing, not rotary."
-  },
-  {
-    question: "Informal name for Indian Army Engineers?",
-    options: ["Signal", "Safety", "Sapper", "Salient"],
-    answer: 0,
-    explanation: "Drones are increasingly used for peacekeeping surveillance."
-  },
-  {
-    question: "What time will a military officer aim to arrive at a meeting?",
-    options: ["Before it starts", "Exactly when it starts", "Anytime", "After it starts"],
-    answer: 0,
-    explanation: "Military staff are usually expected to report earlier."
-  }
-];
-
-let current = 0;
-let score = 0;
-let timeLeft = 30;
-let timerInterval;
-
-function startTimer() {
-  timeLeft = 30;
-  document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
-  clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      selectAnswer(-1);
-    }
-  }, 1000);
-}
-
-function renderQuestion() {
-  const q = questions[current];
-  const container = document.getElementById('quiz-container');
-  container.classList.remove('hidden');
-  container.innerHTML = `<h2>${q.question}</h2>` + q.options.map((opt, i) =>
-    `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('');
-  document.getElementById('result').classList.add('hidden');
-  startTimer();
-}
-
-function selectAnswer(i) {
-  clearInterval(timerInterval);
-  const q = questions[current];
-  const opts = document.querySelectorAll('.option');
-  opts.forEach((opt, idx) => {
-    opt.classList.remove('correct', 'incorrect');
-    opt.onclick = null;
-    if (idx === q.answer) opt.classList.add('correct');
-    else if (idx === i) opt.classList.add('incorrect');
-  });
-  if (i === q.answer) score++;
-  const explanation = document.createElement("div");
-  explanation.className = "explanation";
-  explanation.innerText = q.explanation;
-  document.getElementById('quiz-container').appendChild(explanation);
-  setTimeout(() => {
-    current++;
-    if (current < questions.length) renderQuestion();
-    else showResult();
-  }, 3000);
-}
-
-function showResult() {
-  document.getElementById('quiz-container').classList.add('hidden');
-  const result = document.getElementById('result');
-  let rating;
-  if (score === questions.length) rating = "Outstanding!";
-  else if (score >= questions.length - 1) rating = "Excellent!";
-  else if (score >= questions.length - 2) rating = "Great!";
-  else if (score >= questions.length - 3) rating = "Very good!";
-  else if (score >= 1) rating = "Ready to learn more!";
-  else rating = "Keep practicing!";
-  result.classList.remove('hidden');
-  result.innerHTML = `You scored ${score}/${questions.length} – <strong>${rating}</strong>`;
-}
-
-renderQuestion();
-</script>
-</body>
-</html>
+<div class="overlay">
+  <h1>Military and Police</h1>
+  <div id="timer"></div>
+  <div class="question-card" id="quiz-container"></div>
+  <div id="result" class="hidden"></div>
+  <div id="download-placeholder" class="hidden">
+    Click here to download [Military and Police
