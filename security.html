@@ -1,93 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>UN Military and Police</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/3/31/UN_Mission_Sudan_Peacekeepers_Patrol_2010.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #cce6ff;
-    padding: 20px;
-    margin: 0;
-  }
-  .overlay {
-    background-color: rgba(0, 51, 102, 0.85);
-    padding: 30px;
-    max-width: 700px;
-    margin: auto;
-    border-radius: 16px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    color: #cce6ff;
-  }
-  h1 {
-    text-align: center;
-    color: #99ccff;
-    margin-bottom: 30px;
-  }
-  .question-card {
-    background-color: rgba(204, 230, 255, 0.15);
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
-  .option {
-    background-color: rgba(51, 102, 153, 0.6);
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    color: #cce6ff;
-  }
-  .option:hover {
-    background-color: rgba(51, 102, 153, 0.8);
-  }
-  .option.correct {
-    background-color: #33cc99;
-    color: white;
-    font-weight: bold;
-  }
-  .option.incorrect {
-    background-color: #ff6666;
-    color: white;
-    font-weight: bold;
-  }
-  .explanation {
-    font-style: italic;
-    margin-top: 12px;
-    color: #99ffcc;
-  }
-  #result {
-    text-align: center;
-    font-size: 1.4em;
-    margin-top: 20px;
-    color: #cce6ff;
-  }
-  #download-placeholder {
-    font-size: 1.3em;
-    margin-top: 30px;
-    color: #66d9ff;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-  }
-  .hidden { display: none; }
-  #timer {
-    font-weight: bold;
-    text-align: center;
-    font-size: 1.2em;
-    color: #99ccff;
-    margin-bottom: 15px;
-  }
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#001f3f;color:#fff;}
+  .container{max-width:600px;margin:60px auto;background:rgba(255,255,255,0.03);padding:20px;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+  h1{text-align:center;color:#99ccff;}
+  #timer{text-align:right;font-size:1rem;color:#adcfff;}
+  .question{font-size:1.2rem;margin:20px 0;}
+  .options{display:grid;gap:12px;}
+  .option{background:rgba(255,255,255,0.1);padding:15px;border-radius:12px;cursor:pointer;transition:0.2s;}
+  .option:hover{background:rgba(255,255,255,0.2);}
+  .correct{background:#33cc99!important;color:#001f3f;font-weight:bold;}
+  .incorrect{background:#ff6666!important;color:#001f3f;font-weight:bold;}
+  .explanation{font-style:italic;margin:15px 0;color:#adcfff;}
+  #result{text-align:center;margin:20px;font-size:1.2rem;}
+  #download{display:none;text-align:center;margin-top:20px;color:#66d9ff;cursor:pointer;}
 </style>
 </head>
 <body>
-<div class="overlay">
+<div class="container">
   <h1>Military and Police</h1>
-  <div id="timer"></div>
-  <div class="question-card" id="quiz-container"></div>
-  <div id="result" class="hidden"></div>
-  <div id="download-placeholder" class="hidden">
-    Click here to download [Military and Police
+  <div id="timer">Time left:10s</div>
+  <div class="question" id="question"></div>
+  <div class="options" id="options"></div>
+  <div class="explanation" id="explanation"></div>
+  <div id="result"></div>
+  <div id="download">
+    Click here to download [Military & Police Guide] to learn more.<br>
+    After you’ve read it, reach out to me. I’ll be offering free video sessions to answer your specific questions.
+  </div>
+</div>
+<script>
+const questions=[
+ {q:"How many 'stars' for a Major General in the Pakistani Army?",opts:["1","2","3","4"],a:1},
+ {q:"What letter is 'Alpha' in NATO phonetic alphabet?",opts:["A","L","P","H"],a:0},
+ {q:"NATO phonetic word for the letter 'B'?",opts:["Bravo","Beta","Boston","Baron"],a:0},
+ {q:"Size of typical Bangladeshi Army company?",opts:["10-20 soldiers","40","80-250","1,000-2,000"],a:2},
+ {q:"Which is the fixed-wing aircraft?",opts:["C-130 Hercules","Mi-8","UH-60 Black Hawk","CH-47 Chinook"],a:0},
+ {q:"Which is NOT a rotary aircraft?",opts:["Bell 412","Mi-17","C-130 Hercules","UH-1 Huey"],a:2},
+ {q:"Informal name for Indian Army Engineers?",opts:["Signal","Safety","Sapper","Salient"],a:2},
+ {q:"What time will a military officer aim to arrive at a meeting?",opts:["Before it starts","Exactly when it starts","Anytime after it starts"],a:0}
+];
+let idx=0,score=0,timeLeft=10,timer;
+const qEl=document.getElementById('question'),optsEl=document.getElementById('options'),
+exEl=document.getElementById('explanation'),resEl=document.getElementById('result'),
+tim=document.getElementById('timer'),dl=document.getElementById('download');
+function show(){
+  timeLeft=10; tim.textContent="Time left:10s"; clearInterval(timer);
+  timer=setInterval(()=>{timeLeft--;tim.textContent=`Time left:${timeLeft}s`;if(timeLeft<=0)select(-1)},1000);
+  const {q,opts}=questions[idx];
+  qEl.textContent=q; optsEl.innerHTML=''; exEl.textContent=''; resEl.textContent=''; dl.style.display="none";
+  opts.forEach((o,i)=>{
+    const d=document.createElement('div');
+    d.textContent=o; d.className='option';
+    d.onclick=()=>select(i);
+    optsEl.appendChild(d);
+  });
+}
+function select(i){
+  clearInterval(timer);
+  const {opts,a}=questions[idx];
+  Array.from(optsEl.children).forEach((el,j)=>{
+    el.classList.add(j===a?'correct':j===i?'incorrect':'');
+    el.onclick=null;
+  });
+  if(i===a)score++;
+  exEl.textContent=`Answer: ${opts[a]}.`;
+  setTimeout(()=>{idx++; idx<questions.length?show():finish();},2000);
+}
+function finish(){
+  qEl.textContent=''; optsEl.innerHTML=''; exEl.textContent='';
+  resEl.textContent=`You scored ${score}/${questions.length}.`;
+  dl.style.display="block";
+}
+show();
+</script>
+</body>
+</html>
