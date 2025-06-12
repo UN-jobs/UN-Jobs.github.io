@@ -1,139 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>UN Acronyms Quiz</title>
+  <meta charset="UTF-8">
+  <title>Test Your Knowledge: UN Acronyms</title>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(to bottom right, #ffecd2, #fcb69f); padding: 20px; color: #222; }
-    h1, h2 { text-align: center; }
-    .question-card { background: #fff; border-radius: 12px; padding: 20px; margin: 20px auto; max-width: 600px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-    .option { background: #eee; margin: 8px 0; padding: 10px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
-    .option.correct { background: #a1e3a1; }
-    .option.incorrect { background: #f79a9a; }
-    .explanation { margin-top: 10px; font-style: italic; }
-    #result { text-align: center; font-size: 1.5em; margin-top: 20px; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/1/1e/UN_Security_Council_Chamber.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 20px;
+      color: #fff;
+    }
+    .overlay {
+      background-color: rgba(0, 51, 102, 0.8);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    h1 {
+      text-align: center;
+      color: #b3d9ff;
+    }
+    .question-card {
+      margin-top: 20px;
+    }
+    .option {
+      background-color: #0066cc;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .option:hover { background-color: #005bb5; }
+    .option.correct { background-color: #33cc99; }
+    .option.incorrect { background-color: #ff6666; }
+    .explanation {
+      margin-top: 10px;
+      font-style: italic;
+    }
+    #result {
+      text-align: center;
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+    .hidden { display: none; }
+    #timer {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
-<h1>Test Your Knowledge: UN Acronyms</h1>
-<div class="question-card" id="quiz-container"></div>
-<div id="result"></div>
-
+<div class="overlay">
+  <h1>Test Your Knowledge: UN Acronyms</h1>
+  <div id="timer">Time left: <span id="countdown">30</span> seconds</div>
+  <div class="question-card" id="quiz-container"></div>
+  <div id="result" class="hidden"></div>
+</div>
 <script>
-const questions = [
-  {
-    question: "What does UNDP stand for?",
-    options: ["United Nations Development Programme", "United Nations Diplomatic Panel", "United Nations Disaster Prevention", "United Nations Defense Pact"],
-    answer: 0,
-    explanation: "UNDP stands for United Nations Development Programme. Read [to be inserted] to find out more!"
-  },
-  {
-    question: "What does UNICEF focus on?",
-    options: ["Child welfare", "Peacekeeping", "Economic development", "Human rights"],
-    answer: 0,
-    explanation: "UNICEF focuses on child welfare and development. Read [to be inserted] to find out more!"
-  },
-  {
-    question: "What is the meaning of UNHCR?",
-    options: ["United Nations High Commissioner for Refugees", "United Nations Humanitarian Crisis Response", "United Nations Health and Care Resources", "United Nations Human Rights Council"],
-    answer: 0,
-    explanation: "UNHCR is the United Nations High Commissioner for Refugees. Read [to be inserted] to find out more!"
-  },
-  {
-    question: "What does UNESCO stand for?",
-    options: ["United Nations Educational, Scientific and Cultural Organization", "United Nations Economic and Social Council", "United Nations Environmental Safety Committee", "United Nations Energy Sector Council"],
-    answer: 0,
-    explanation: "UNESCO stands for United Nations Educational, Scientific and Cultural Organization. Read [to be inserted] to find out more!"
-  },
-  {
-    question: "What is UN WOMEN?",
-    options: ["United Nations Entity for Gender Equality and the Empowerment of Women", "United Nations Women’s Welfare Group", "United Nations Women’s Workgroup", "United Nations Women’s Watch"],
-    answer: 0,
-    explanation: "UN WOMEN promotes gender equality and women’s empowerment. Read [to be inserted] to find out more!"
-  },
-  {
-    question: "What does UNFPA stand for?",
-    options: ["United Nations Population Fund", "United Nations Food Programme Association", "United Nations Financial Planning Agency", "United Nations Forest Protection Alliance"],
-    answer: 0,
-    explanation: "UNFPA is the United Nations Population Fund. Read [to be inserted] to find out more!"
-  },
-  {
-    question: "What does WHO stand for in the UN context?",
-    options: ["World Health Organization", "World Humanitarian Organization", "Worldwide Health Outreach", "World Habitat Organization"],
-    answer: 0,
-    explanation: "WHO stands for World Health Organization. Read [to be inserted] to find out more!"
-  },
-  {
-    question: "What is the full name of WFP?",
-    options: ["World Food Programme", "World Forest Protection", "World Fisheries Partnership", "World Foundation for Peace"],
-    answer: 0,
-    explanation: "WFP stands for World Food Programme. Read [to be inserted] to find out more!"
-  },
-  {
-    question: "What does IAEA stand for?",
-    options: ["International Atomic Energy Agency", "International Agriculture and Environment Association", "International Air and Energy Administration", "International Agency for Education and Arts"],
-    answer: 0,
-    explanation: "IAEA is the International Atomic Energy Agency. Read [to be inserted] to find out more!"
-  },
-  {
-    question: "What does ILO stand for?",
-    options: ["International Labour Organization", "International Legal Observatory", "International Leadership Office", "International Law Organization"],
-    answer: 0,
-    explanation: "ILO stands for International Labour Organization. Read [to be inserted] to find out more!"
+  const questions = [
+    {
+      question: "What is the human rights instrument OP-CAT?",
+      options: [
+        "Optional Protocol to the Convention Against Torture",
+        "Operational Committee for Arms Trade",
+        "Office for Counterterrorism Action Team",
+        "Official Protocol on Child and Trafficking"
+      ],
+      answer: 0,
+      explanation: "Optional Protocol to the Convention Against Torture."
+    },
+    {
+      question: "What is the UN's ACABQ?",
+      options: [
+        "Advisory Committee on Administrative and Budgetary Questions",
+        "African Charter on Arms and Budgetary Questions",
+        "Administrative Council Against Bureaucratic Quotas",
+        "Association for Central Asian Budgetary Questions"
+      ],
+      answer: 0,
+      explanation: "Advisory Committee on Administrative and Budgetary Questions."
+    },
+    {
+      question: "BINUH is the UN office in which country?",
+      options: ["Haiti", "Burundi", "Niger", "Ukraine"],
+      answer: 0,
+      explanation: "BINUH is the United Nations Integrated Office in Haiti."
+    },
+    {
+      question: "What is the UN's EOSG in New York?",
+      options: [
+        "Executive Office of the Secretary-General",
+        "Economic Office of Strategic Governance",
+        "Environmental Oversight and Sustainability Group",
+        "Emergency Operations and Safety Group"
+      ],
+      answer: 0,
+      explanation: "Executive Office of the Secretary-General."
+    },
+    {
+      question: "What is UNSSC?",
+      options: [
+        "United Nations System Staff College",
+        "United Nations Secretariat Service Committee",
+        "United Nations Strategic Support Cell",
+        "UN Security Steering Commission"
+      ],
+      answer: 0,
+      explanation: "United Nations System Staff College."
+    }
+  ];
+
+  let current = 0;
+  let score = 0;
+  let timer;
+
+  function startTimer() {
+    let timeLeft = 30;
+    document.getElementById('countdown').textContent = timeLeft;
+    timer = setInterval(() => {
+      timeLeft--;
+      document.getElementById('countdown').textContent = timeLeft;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        selectAnswer(-1);
+      }
+    }, 1000);
   }
-];
 
-let current = 0;
-let score = 0;
+  function renderQuestion() {
+    clearInterval(timer);
+    const q = questions[current];
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = `<h2>${q.question}</h2>` + q.options.map((opt, i) =>
+      `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('');
+    startTimer();
+  }
 
-function renderQuestion() {
-  const q = questions[current];
-  const container = document.getElementById('quiz-container');
-  container.innerHTML = `<h2>${q.question}</h2>` + q.options.map((opt, i) =>
-    `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('');
-}
+  function selectAnswer(i) {
+    clearInterval(timer);
+    const q = questions[current];
+    const opts = document.querySelectorAll('.option');
+    opts.forEach((opt, idx) => {
+      opt.classList.remove('correct', 'incorrect');
+      opt.onclick = null;
+      if (idx === q.answer) opt.classList.add('correct');
+      else if (idx === i) opt.classList.add('incorrect');
+    });
+    if (i === q.answer) score++;
+    const explanation = document.createElement("div");
+    explanation.className = "explanation";
+    explanation.innerText = q.explanation;
+    document.getElementById('quiz-container').appendChild(explanation);
 
-function selectAnswer(i) {
-  const q = questions[current];
-  const opts = document.querySelectorAll('.option');
-  opts.forEach((opt, idx) => {
-    opt.classList.remove('correct', 'incorrect');
-    opt.onclick = null;
-    if (idx === q.answer) opt.classList.add('correct');
-    else if (idx === i) opt.classList.add('incorrect');
-  });
-  if (i === q.answer) score++;
-  const explanation = document.createElement("div");
-  explanation.className = "explanation";
-  explanation.innerText = q.explanation;
-  document.getElementById('quiz-container').appendChild(explanation);
+    setTimeout(() => {
+      current++;
+      if (current < questions.length) renderQuestion();
+      else showResult();
+    }, 3000);
+  }
 
-  setTimeout(() => {
-    current++;
-    if (current < questions.length) renderQuestion();
-    else showResult();
-  }, 2000);
-}
+  function showResult() {
+    const container = document.getElementById('quiz-container');
+    container.classList.add('hidden');
+    const result = document.getElementById('result');
+    const messages = [
+      "Outstanding!", "Excellent!", "Great!", "Very good!",
+      "Not bad – keep learning!", "Needs more practice!",
+      "Time to hit the books!"
+    ];
+    const readMore = "Read [to be inserted] to find out more!";
+    let rating;
+    if (score === 5) rating = messages[0];
+    else if (score === 4) rating = messages[1];
+    else if (score === 3) rating = messages[2];
+    else if (score === 2) rating = messages[3];
+    else if (score === 1) rating = messages[4];
+    else rating = messages[5];
 
-function showResult() {
-  const container = document.getElementById('quiz-container');
-  container.innerHTML = '';
-  const result = document.getElementById('result');
-  const messages = ["Outstanding!", "Excellent!", "Great!", "Very good!", "Not bad – keep learning!", "Needs more practice!", "Time to hit the books!"];
-  const readMore = "Read [to be inserted] to find out more!";
-  let rating;
-  if (score === 10) rating = messages[0];
-  else if (score >= 8) rating = messages[1];
-  else if (score >= 6) rating = messages[2];
-  else if (score >= 5) rating = messages[3];
-  else if (score >= 3) rating = messages[4];
-  else if (score >= 1) rating = messages[5];
-  else rating = messages[6];
+    result.classList.remove('hidden');
+    result.innerHTML = `You scored ${score}/5 – <strong>${rating}</strong><br>${readMore}`;
+  }
 
-  result.innerHTML = `You scored ${score}/10 – <strong>${rating}</strong><br>${readMore}`;
-}
-
-renderQuestion();
+  renderQuestion();
 </script>
 </body>
 </html>
