@@ -1,202 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8">
 <title>UN Capital Cities</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  body {
-    font-family: 'Segoe UI', sans-serif;
-    background: url('https://upload.wikimedia.org/wikipedia/commons/9/99/Blank_map_of_Africa_with_countries_named.svg') no-repeat center center fixed;
-    background-size: contain;
-    color: #003366;
-    padding: 20px;
-    margin: 0;
-    background-color: #cce6ff;
-  }
-  .overlay {
-    background-color: rgba(230, 245, 255, 0.95);
-    padding: 30px;
-    max-width: 700px;
-    margin: auto;
-    border-radius: 16px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    color: #003366;
-  }
-  h1 {
-    text-align: center;
-    color: #0073e6;
-    margin-bottom: 30px;
-  }
-  .question-card {
-    background-color: #cce6ff;
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-  }
+  body { margin:0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #f5f6f8; color: #333; }
+  .container { max-width: 600px; margin: 60px auto; padding: 20px; background: #fff; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); position:relative; }
+  h1 { text-align:center; color:#0073e6; }
+  #timer { font-size:1rem; text-align:right; color:#555; }
+  .question { font-size:1.2rem; margin:20px 0; }
+  .options { display:grid; gap:12px; }
   .option {
-    background-color: #99ccff;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    background:#e5f2ff; padding:15px; border-radius:12px; cursor:pointer;
+    transition:background 0.2s, transform 0.2s;
   }
-  .option:hover {
-    background-color: #80b3ff;
-  }
-  .option.correct {
-    background-color: #33cc99;
-    color: white;
-    font-weight: bold;
-  }
-  .option.incorrect {
-    background-color: #ff6666;
-    color: white;
-    font-weight: bold;
-  }
-  .explanation {
-    font-style: italic;
-    margin-top: 12px;
-    color: #004d00;
-  }
-  #result {
-    text-align: center;
-    font-size: 1.4em;
-    margin-top: 20px;
-    color: #003366;
-  }
-  #download-placeholder {
-    font-size: 1.3em;
-    margin-top: 30px;
-    color: #00509e;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-  }
-  .hidden { display: none; }
-  #timer {
-    font-weight: bold;
-    text-align: center;
-    font-size: 1.2em;
-    color: #0073e6;
-    margin-bottom: 15px;
-  }
+  .option:hover { background:#d0e9ff; transform:translateY(-2px); }
+  .correct { background:#d4f7d4 !important; }
+  .incorrect { background:#ffd6d6 !important; }
+  .explanation { margin:15px 0; font-style:italic; }
+  #result { text-align:center; margin:20px 0; font-size:1.2rem; }
+  #download { font-size:1rem; text-align:center; margin-top:20px; color:#0073e6; cursor:pointer; }
 </style>
 </head>
 <body>
-<div class="overlay">
+<div class="container">
   <h1>Capital Cities</h1>
-  <div id="timer"></div>
-  <div class="question-card" id="quiz-container"></div>
-  <div id="result" class="hidden"></div>
-  <div id="download-placeholder" class="hidden">
+  <div id="timer">Time left: 10s</div>
+  <div class="question" id="question"></div>
+  <div class="options" id="options"></div>
+  <div id="explanation"></div>
+  <div id="result"></div>
+  <div id="download" style="display:none;">
     Click here to download [Capital Cities Guide] to learn more.<br>
     After you’ve read it, reach out to me. I’ll be offering free video sessions to answer your specific questions.
   </div>
 </div>
-
 <script>
 const questions = [
-  {
-    question: "What is the capital city of Kenya?",
-    options: ["Nairobi", "Mombasa", "Kisumu", "Eldoret"],
-    answer: 0,
-    explanation: "Nairobi is the capital city of Kenya."
-  },
-  {
-    question: "What is the capital city of Uganda?",
-    options: ["Kampala", "Entebbe", "Jinja", "Gulu"],
-    answer: 0,
-    explanation: "Kampala is the capital city of Uganda."
-  },
-  {
-    question: "What is the capital city of Tanzania?",
-    options: ["Dodoma", "Dar es Salaam", "Arusha", "Mwanza"],
-    answer: 0,
-    explanation: "Dodoma is the official capital city of Tanzania."
-  },
-  {
-    question: "What is the capital city of Rwanda?",
-    options: ["Kigali", "Butare", "Gisenyi", "Huye"],
-    answer: 0,
-    explanation: "Kigali is the capital city of Rwanda."
-  },
-  {
-    question: "What is the capital city of Burundi?",
-    options: ["Gitega", "Bujumbura", "Ngozi", "Ruyigi"],
-    answer: 0,
-    explanation: "Gitega is the current capital city of Burundi."
-  }
+  {q:"Your UN manager asks you: can you get on the phone with Juba? Who do you call", opts:["South Sudan","Sudan","Ethiopia","Chad"], a:0},
+  {q:"Does Wellington agree? What country is this UN official referring to?", opts:["Australia","Canada","New Zealand","UK"], a:2},
+  {q:"Where is Dhaka on this? (Where is Dhaka?)", opts:["Pakistan","Nepal","India","Bangladesh"], a:3},
+  {q:"Ouagadougou is the capital of?", opts:["Burkina Faso","Benin","Cameroon","Togo"], a:0},
+  {q:"Naypyidaw has been which capital since 2005?", opts:["Myanmar","Malaysia","Thailand","Vietnam"], a:0},
+  {q:"Has the delegation arrived in Kinshasa? (Where?)", opts:["Republic of Congo","Angola","Rwanda","Democratic Republic of the Congo"], a:3},
+  {q:"Have we got an answer from Asmara? (Which country?)", opts:["Eritrea","Ethiopia","Djibouti","Somalia"], a:0},
+  {q:"Dili is the capital of?", opts:["East Timor","Indonesia","Malaysia","Papua New Guinea"], a:0},
+  {q:"Did you see that UN political job in Bangui? (Where?)", opts:["Cameroon","CAR","DRC","Gabon"], a:1},
+  {q:"I'll call you from Manama. The call will come from which country?", opts:["Qatar","UAE","Bahrain","Oman"], a:2},
+  {q:"Kathmandu is the political and cultural center of where?", opts:["India","Tibet","Bangladesh","Nepal"], a:3},
+  {q:"Can you join the Secretary-General's phone call with Ashgabat?", opts:["Uzbekistan","Afghanistan","Turkmenistan","Kazakhstan"], a:2}
 ];
+let idx=0, score=0, timeLeft=10, timer;
+const qEl=document.getElementById('question'), optsEl=document.getElementById('options'),
+exEl=document.getElementById('explanation'), resEl=document.getElementById('result'),
+tim=document.getElementById('timer'), dl=document.getElementById('download');
 
-let current = 0;
-let score = 0;
-let timeLeft = 10;
-let timerInterval;
-
-function startTimer() {
-  timeLeft = 10;
-  document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
-  clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    timeLeft--;
-    document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
-    if (timeLeft <= 0) {
-      clearInterval(timerInterval);
-      selectAnswer(-1);
-    }
-  }, 1000);
-}
-
-function renderQuestion() {
-  const q = questions[current];
-  const container = document.getElementById('quiz-container');
-  container.classList.remove('hidden');
-  container.innerHTML = `<h2>${q.question}</h2>` + q.options.map((opt, i) =>
-    `<div class="option" onclick="selectAnswer(${i})">${opt}</div>`).join('');
-  document.getElementById('result').classList.add('hidden');
-  document.getElementById('download-placeholder').classList.add('hidden');
-  startTimer();
-}
-
-function selectAnswer(i) {
-  clearInterval(timerInterval);
-  const q = questions[current];
-  const opts = document.querySelectorAll('.option');
-  opts.forEach((opt, idx) => {
-    opt.classList.remove('correct', 'incorrect');
-    opt.onclick = null;
-    if (idx === q.answer) opt.classList.add('correct');
-    else if (idx === i) opt.classList.add('incorrect');
+function show(){
+  timeLeft=10; tim.textContent="Time left: 10s";
+  clearInterval(timer); timer=setInterval(()=>{
+    timeLeft--; tim.textContent=`Time left: ${timeLeft}s`;
+    if(timeLeft<=0){select(-1);}
+  },1000);
+  const {q,opts}=questions[idx];
+  qEl.textContent=q; optsEl.innerHTML='';
+  exEl.textContent=''; 
+  opts.forEach((o,i)=> {
+    const d = document.createElement('div');
+    d.textContent=o; d.className='option';
+    d.onclick=()=>select(i);
+    optsEl.appendChild(d);
   });
-  if (i === q.answer) score++;
-  const explanation = document.createElement("div");
-  explanation.className = "explanation";
-  explanation.innerText = q.explanation;
-  document.getElementById('quiz-container').appendChild(explanation);
-  setTimeout(() => {
-    current++;
-    if (current < questions.length) renderQuestion();
-    else showResult();
-  }, 3000);
+}
+function select(i){
+  clearInterval(timer);
+  const {opts,a}=questions[idx];
+  Array.from(optsEl.children).forEach((el,j)=>{
+    el.classList.add(j===a?'correct': j===i?'incorrect':'');
+    el.onclick=null;
+  });
+  if(i===a) score++;
+  exEl.textContent=`Answer: ${opts[a]}.`;
+  setTimeout(()=>{
+    idx++;
+    if(idx<questions.length) show();
+    else finish();
+  },2000);
 }
 
-function showResult() {
-  document.getElementById('quiz-container').classList.add('hidden');
-  const result = document.getElementById('result');
-  let rating;
-  if (score === 5) rating = "Outstanding!";
-  else if (score === 4) rating = "Excellent!";
-  else if (score === 3) rating = "Great!";
-  else if (score === 2) rating = "Very good!";
-  else if (score === 1) rating = "Ready to learn more!";
-  else rating = "Keep practicing!";
-  result.classList.remove('hidden');
-  result.innerHTML = `You scored ${score}/5 – <strong>${rating}</strong>`;
-  document.getElementById('download-placeholder').classList.remove('hidden');
+function finish(){
+  qEl.textContent=''; optsEl.innerHTML='';
+  resEl.textContent=`You scored ${score}/${questions.length}. `;
+  dl.style.display='block';
 }
 
-renderQuestion();
+show();
 </script>
 </body>
 </html>
